@@ -64,9 +64,9 @@ RUN pnpm i
 
 COPY . /app
 
-# Create necessary directories
-RUN mkdir -p /app/log /app/tmp/pids
-RUN chmod -R 777 /app/log /app/tmp/
+# Create necessary directories and set permissions
+RUN mkdir -p /app/log /app/tmp/pids /app/public/uploads /app/public/assets
+RUN chmod -R 777 /app/log /app/tmp /app/public
 
 # creating a log directory so that image wont fail when RAILS_LOG_TO_STDOUT is false
 # https://github.com/chatwoot/chatwoot/issues/701
@@ -132,5 +132,9 @@ COPY --from=pre-builder /app /app
 COPY --from=pre-builder /app/.git_sha /app/.git_sha
 
 WORKDIR /app
+
+COPY . /app/.
+RUN RAILS_ENV=production SECRET_KEY_BASE=dummy_key bundle exec rake assets:precompile
+RUN bundle exec bootsnap precompile app/ lib/
 
 EXPOSE 3000
