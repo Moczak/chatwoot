@@ -20,7 +20,6 @@ test:
   password: "<%= ENV.fetch('POSTGRES_PASSWORD', '') %>"
 
 production:
-  <<: *default
-  database: "<%= ENV.fetch('POSTGRES_DATABASE', 'chatwoot') %>"  # alterei para 'chatwoot' aqui
-  username: "<%= ENV.fetch('POSTGRES_USERNAME', 'postgres') %>"
-  password: "<%= ENV.fetch('POSTGRES_PASSWORD', '') %>"
+  url: <%= ENV.fetch('DATABASE_URL', 'postgres://postgres:546b74edfc8977b52bdd@chatwoot_chatwoot-db:5432/chatwoot') %>
+  pool: <%= ENV.fetch('RAILS_MAX_THREADS', 5) %>
+  timeout: 5000
